@@ -23,13 +23,13 @@ New rows are added with each video. Video pages are in [videos/](videos/).
 
 | Rule | Purpose | Type | Video |
 |------|---------|------|-------|
-| [Burst cadence](detections/sigma/web-waf/burst_cadence.yml) | One client sends far more requests in 10 s than a real user | correlation | [AI pentest defence](videos/long09-ai-pentest-defense.md) |
-| [Path enumeration](detections/sigma/web-waf/path_enumeration.yml) | Many distinct 403/404 paths from one client in a minute | correlation | [AI pentest defence](videos/long09-ai-pentest-defense.md) |
-| [Data pull](detections/sigma/web-waf/data_pull.yml) | One token runs many export/dump/backup actions in an hour | correlation | [AI pentest defence](videos/long09-ai-pentest-defense.md) |
-| [Token from a new place](detections/sigma/cicd-tokens/token_used_from_new_place.yml) | GitHub token used outside your CI runner ranges | base rule | [AI pentest defence](videos/long09-ai-pentest-defense.md) |
-| [Token creates resources](detections/sigma/cicd-tokens/token_creates_resources.yml) | One identity creates many functions, keys or roles quickly | correlation | [AI pentest defence](videos/long09-ai-pentest-defense.md) |
-| [Servers calling LLM APIs](detections/sigma/network-dns/servers_calling_llm_apis.yml) | DNS lookups for LLM API hosts from hosts with no need | base rule | [AI pentest defence](videos/long09-ai-pentest-defense.md) |
-| [Permission probing](detections/sigma/cloud-identity/permission_probing.yml) | Many distinct AWS DryRun permission checks | correlation | [AI pentest defence](videos/long09-ai-pentest-defense.md) |
+| [Burst cadence](detections/sigma/web-waf/burst_cadence.yml) | One client sends far more requests in 10 s than a real user | correlation | [AI pentest defence](videos/ai-pentest-defense.md) |
+| [Path enumeration](detections/sigma/web-waf/path_enumeration.yml) | Many distinct 403/404 paths from one client in a minute | correlation | [AI pentest defence](videos/ai-pentest-defense.md) |
+| [Data pull](detections/sigma/web-waf/data_pull.yml) | One token runs many export/dump/backup actions in an hour | correlation | [AI pentest defence](videos/ai-pentest-defense.md) |
+| [Token from a new place](detections/sigma/cicd-tokens/token_used_from_new_place.yml) | GitHub token used outside your CI runner ranges | base rule | [AI pentest defence](videos/ai-pentest-defense.md) |
+| [Token creates resources](detections/sigma/cicd-tokens/token_creates_resources.yml) | One identity creates many functions, keys or roles quickly | correlation | [AI pentest defence](videos/ai-pentest-defense.md) |
+| [Servers calling LLM APIs](detections/sigma/network-dns/servers_calling_llm_apis.yml) | DNS lookups for LLM API hosts from hosts with no need | base rule | [AI pentest defence](videos/ai-pentest-defense.md) |
+| [Permission probing](detections/sigma/cloud-identity/permission_probing.yml) | Many distinct AWS DryRun permission checks | correlation | [AI pentest defence](videos/ai-pentest-defense.md) |
 
 Correlation files hold a base rule plus a Sigma correlation rule (`event_count` / `value_count`), which need a recent pySigma backend.
 
