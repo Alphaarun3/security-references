@@ -1,4 +1,4 @@
-# security-detections
+# security-references
 
 Defensive detection content from my security videos on product security and AI security. Each video adds new detections here, as Sigma rules you can convert to your own SIEM.
 
