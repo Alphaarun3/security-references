@@ -50,4 +50,4 @@ Defensive content only. No exploits or attack payloads. Rules are `experimental`
 
 ## License
 
-See [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).
