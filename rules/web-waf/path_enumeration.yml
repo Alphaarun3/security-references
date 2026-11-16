@@ -1,0 +1,55 @@
+title: Web Error Responses for Probed Paths (Base)
+name: web_error_responses
+id: 3ff3f927-2949-4ec7-a91e-b01f939e5acc
+status: experimental
+description: |
+  403 and 404 responses. Used by the correlation rule below; not meant to alert alone.
+references:
+  - https://blog.cloudflare.com/adapting-to-ai-penetration-testing-orchestrators/
+  - FBI FLASH-20261113-001
+author: Arunkumar R
+date: 2026-11-16
+tags:
+  - attack.discovery
+  - attack.t1595.003
+logsource:
+  category: webserver
+detection:
+  selection:
+    sc-status:
+      - 403
+      - 404
+  condition: selection
+falsepositives:
+  - Single missing pages; use the correlation rule instead
+level: informational
+---
+title: Web Path Enumeration per Client
+id: 1fbe8507-4b5e-427f-ab13-2c2402f58446
+status: experimental
+description: |
+  One client hits many distinct paths that return 403 or 404 within a minute (admin paths, backups, old API versions), the footprint of automated enumeration.
+  Thresholds are examples only. Tune on your own baseline and run in log-only mode first.
+references:
+  - https://blog.cloudflare.com/adapting-to-ai-penetration-testing-orchestrators/
+  - FBI FLASH-20261113-001
+author: Arunkumar R
+date: 2026-11-16
+tags:
+  - attack.discovery
+  - attack.t1595.003
+correlation:
+  type: value_count
+  rules:
+    - web_error_responses
+  group-by:
+    - c-ip
+  timespan: 1m
+  condition:
+    gte: 40
+    field: cs-uri-stem
+falsepositives:
+  - Broken-link crawlers
+  - Vulnerability scanners you run yourself
+  - Misconfigured monitoring
+level: medium

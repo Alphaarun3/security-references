@@ -1,0 +1,51 @@
+title: AWS DryRun Permission Check (Base)
+name: aws_dryrun_checks
+id: 8a183fa5-a898-4450-9406-12bc593580bb
+status: experimental
+description: |
+  EC2 API calls rejected with DryRunOperation, used to test permissions without acting. Used by the correlation rule below.
+references:
+  - FBI FLASH-20261113-001
+author: Arunkumar R
+date: 2026-11-16
+tags:
+  - attack.discovery
+  - attack.t1580
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    errorCode: 'Client.DryRunOperation'
+  condition: selection
+falsepositives:
+  - Single DryRun calls from Terraform or SDK validation
+level: informational
+---
+title: Permission Probing - Many Distinct DryRun APIs
+id: 551cdc50-639e-486f-ad24-3104dc551835
+status: experimental
+description: |
+  One identity tests permissions across many distinct APIs with DryRun in minutes. Related behaviours from the FLASH (Azure ARM validation sweeps, write-then-delete blob tests, bursts of PassRole or Simulate calls) are not covered here.
+  Thresholds are examples only. Tune on your own baseline and run in log-only mode first.
+references:
+  - FBI FLASH-20261113-001
+author: Arunkumar R
+date: 2026-11-16
+tags:
+  - attack.discovery
+  - attack.t1580
+correlation:
+  type: value_count
+  rules:
+    - aws_dryrun_checks
+  group-by:
+    - userIdentity.arn
+  timespan: 5m
+  condition:
+    gte: 6
+    field: eventName
+falsepositives:
+  - Infrastructure tooling that validates plans
+  - Security posture scanners
+level: high

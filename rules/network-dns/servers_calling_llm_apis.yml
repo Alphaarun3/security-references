@@ -1,0 +1,32 @@
+title: DNS Query to LLM API Host
+id: 656869d2-edeb-43ed-9f3b-834c61e7beae
+status: experimental
+description: |
+  DNS lookups for LLM API hosts. Alert only for servers, domain controllers and database hosts with no business need.
+  Baseline which hosts and apps legitimately call these and exclude them with a filter on your own host list; developer workstations will match by design.
+  Run in log-only mode first.
+references:
+  - https://blog.cloudflare.com/adapting-to-ai-penetration-testing-orchestrators/
+  - FBI FLASH-20261113-001
+author: Arunkumar R
+date: 2026-11-16
+tags:
+  - attack.command-and-control
+  - attack.t1102
+logsource:
+  category: dns
+detection:
+  selection:
+    query|endswith:
+      - 'api.anthropic.com'
+      - 'api.deepseek.com'
+      - 'open.bigmodel.cn'
+      - 'api.x.ai'
+      - 'api.openai.com'
+      - 'generativelanguage.googleapis.com'
+  condition: selection
+falsepositives:
+  - Approved AI applications and developer workstations
+  - Security tools with AI features
+  - Browsers or agents on user endpoints
+level: medium

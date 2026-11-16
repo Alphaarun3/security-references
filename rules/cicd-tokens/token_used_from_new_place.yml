@@ -1,0 +1,31 @@
+title: GitHub Token Used From Outside Known CI Runner Ranges
+id: 41e5dbd1-d263-4013-aa64-6a618d7f7120
+status: experimental
+description: |
+  A personal access token, app or other programmatic credential is used from an IP outside your expected runner egress ranges.
+  Replace the CIDR placeholders (RFC 5737 documentation ranges) with your own runner ranges. With OIDC short-lived credentials this rule becomes almost silent.
+  Tune on your own baseline and run in log-only mode first.
+references:
+  - https://blog.cloudflare.com/adapting-to-ai-penetration-testing-orchestrators/
+author: Arunkumar R
+date: 2026-11-16
+tags:
+  - attack.credential-access
+  - attack.t1528
+  - attack.t1078
+logsource:
+  product: github
+  service: audit
+detection:
+  selection:
+    programmatic_access_type|contains: 'token'
+  filter_known_runners:
+    actor_ip|cidr:
+      - '192.0.2.0/24'
+      - '198.51.100.0/24'
+  condition: selection and not filter_known_runners
+falsepositives:
+  - Developers using tokens from home or office networks
+  - New self-hosted runners not yet in the allow-list
+  - VPN egress changes
+level: medium

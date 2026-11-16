@@ -1,0 +1,55 @@
+title: Application Export or Dump Action (Base)
+name: app_export_actions
+id: fd9fc84f-fbdf-4f64-a9a4-dbe5a74960fe
+status: experimental
+description: |
+  Calls to export, dump or backup actions in application or API logs. Used by the correlation rule below; adjust field names to your source.
+references:
+  - https://blog.cloudflare.com/adapting-to-ai-penetration-testing-orchestrators/
+author: Arunkumar R
+date: 2026-11-16
+tags:
+  - attack.collection
+  - attack.t1119
+logsource:
+  category: application
+  definition: 'Application or API audit log with an action field and a user or token id'
+detection:
+  selection:
+    action|contains:
+      - 'export'
+      - 'dump'
+      - 'backup'
+  condition: selection
+falsepositives:
+  - Scheduled exports and backups; exclude known service accounts
+level: informational
+---
+title: Excessive Data Export Actions per Token
+id: f234a156-348d-4056-a3ae-e22d81be7426
+status: experimental
+description: |
+  One session or token calls export, dump or backup actions far above normal within an hour (Cloudflare reported about 400 database dump requests in an hour). A per-user bytes-out comparison against a 7-day baseline is stronger but needs SIEM-specific queries.
+  Thresholds are examples only. Tune on your own baseline and run in log-only mode first.
+references:
+  - https://blog.cloudflare.com/adapting-to-ai-penetration-testing-orchestrators/
+author: Arunkumar R
+date: 2026-11-16
+tags:
+  - attack.collection
+  - attack.exfiltration
+  - attack.t1119
+correlation:
+  type: event_count
+  rules:
+    - app_export_actions
+  group-by:
+    - user_id
+  timespan: 1h
+  condition:
+    gte: 20
+falsepositives:
+  - Reporting and analytics jobs
+  - Data migrations
+  - Admin-initiated bulk exports
+level: high

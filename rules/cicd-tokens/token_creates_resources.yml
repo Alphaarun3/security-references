@@ -1,0 +1,59 @@
+title: AWS Identity or Function Creation (Base)
+name: aws_token_create_events
+id: e1868a67-725a-49e5-a582-9e947d1c9a1c
+status: experimental
+description: |
+  CloudTrail events that create functions, access keys, roles or users. Used by the correlation rule below; not meant to alert alone.
+references:
+  - https://blog.cloudflare.com/adapting-to-ai-penetration-testing-orchestrators/
+author: Arunkumar R
+date: 2026-11-16
+tags:
+  - attack.persistence
+  - attack.t1098.001
+  - attack.t1136.003
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventSource:
+      - 'lambda.amazonaws.com'
+      - 'iam.amazonaws.com'
+    eventName:
+      - 'CreateFunction20150331'
+      - 'CreateAccessKey'
+      - 'CreateRole'
+      - 'CreateUser'
+  condition: selection
+falsepositives:
+  - Single legitimate deployments; use the correlation rule instead
+level: informational
+---
+title: Many Resources or Credentials Created by One Identity
+id: a4cfaf9a-bc29-4d56-808d-cf5e2716706e
+status: experimental
+description: |
+  One identity creates many functions, keys, roles or users in a short window, or outside a deploy run (Cloudflare saw many Worker scripts with a shared prefix). Join with your CI run history for the strongest signal.
+  Thresholds are examples only. Tune on your own baseline and run in log-only mode first.
+references:
+  - https://blog.cloudflare.com/adapting-to-ai-penetration-testing-orchestrators/
+author: Arunkumar R
+date: 2026-11-16
+tags:
+  - attack.persistence
+  - attack.t1098.001
+  - attack.t1136.003
+correlation:
+  type: event_count
+  rules:
+    - aws_token_create_events
+  group-by:
+    - userIdentity.arn
+  timespan: 10m
+  condition:
+    gte: 6
+falsepositives:
+  - Infrastructure-as-code deploys
+  - Account provisioning scripts
+level: high

@@ -1,0 +1,53 @@
+title: Web Request Burst Cadence (Base)
+name: web_sensitive_route_requests
+id: 982dba14-9425-42bd-a2fa-585aab0c12ca
+status: experimental
+description: |
+  Requests to login, search or API routes. Used by the correlation rule below; not meant to alert alone.
+references:
+  - https://blog.cloudflare.com/adapting-to-ai-penetration-testing-orchestrators/
+author: Arunkumar R
+date: 2026-11-16
+tags:
+  - attack.reconnaissance
+  - attack.t1595
+logsource:
+  category: webserver
+detection:
+  selection:
+    cs-uri-stem|contains:
+      - '/login'
+      - '/search'
+      - '/api/'
+  condition: selection
+falsepositives:
+  - Single legitimate requests; use the correlation rule instead
+level: informational
+---
+title: Web Request Burst Cadence per Client
+id: bcd42636-58fd-445c-a97a-2db83e564a97
+status: experimental
+description: |
+  One client sends far more requests in 10 seconds than your busiest real user. AI pentest orchestrators are fast and rotate IPs, so also group by API token where your logs carry one.
+  Thresholds are examples only. Tune on your own baseline and run in log-only mode first.
+references:
+  - https://blog.cloudflare.com/adapting-to-ai-penetration-testing-orchestrators/
+author: Arunkumar R
+date: 2026-11-16
+tags:
+  - attack.reconnaissance
+  - attack.t1595
+correlation:
+  type: event_count
+  rules:
+    - web_sensitive_route_requests
+  group-by:
+    - c-ip
+  timespan: 10s
+  condition:
+    gte: 50
+falsepositives:
+  - Load tests
+  - Legitimate API clients and partner integrations
+  - Shared NAT or corporate proxy IPs
+level: medium
