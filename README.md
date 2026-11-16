@@ -42,7 +42,32 @@ sigma convert -t lucene --without-pipeline rules/network-dns/servers_calling_llm
 sigma convert -t kusto --without-pipeline rules/cicd-tokens/token_used_from_new_place.yml
 ```
 
-Use the processing pipeline for your log source in place of `--without-pipeline` where one exists, then map field names. Not every backend supports every correlation type.
+Not every backend supports every correlation type.
+
+## Make it fit your environment (Splunk example)
+
+Sigma rules are generic. They do not know your Splunk index names or your field names, so you tell the converter with a small **pipeline file**. An example is in [pipelines/splunk-example.yml](pipelines/splunk-example.yml). Copy it and edit three things:
+
+1. **Index and sourcetype**: the `index:` and `sourcetype:` values (for example `web`, `dns`, `aws_cloudtrail`) to the ones in your Splunk.
+2. **Field names**: the right side of the `mapping:` (for example `src_ip`, `uri_path`, `status`) to the field names your data really uses.
+3. **Allow-lists**: for rules 4 and 6, put your own CI runner ranges and approved AI hosts in the rule's filter.
+
+Then convert with your pipeline:
+
+```bash
+sigma convert -t splunk -p pipelines/my-splunk.yml rules/web-waf/path_enumeration.yml
+```
+
+Example output with the pipeline applied:
+
+```
+index="web" sourcetype="access_combined" (status IN (403, 404))
+| bin _time span=1m
+| stats dc(uri_path) as value_count by _time src_ip
+| search value_count >= 40
+```
+
+To find your real field names, run a search on your own data and look at the fields (`index=web | head 5`). Run the converted query as a saved search in log-only mode before you alert. Sentinel and Elastic work the same way with their own pipelines.
 
 ## Scope
 

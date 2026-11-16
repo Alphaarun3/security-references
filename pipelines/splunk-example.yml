@@ -1,0 +1,41 @@
+# Example Sigma processing pipeline for Splunk. COPY this file and edit it for your environment.
+# Replace the index names and the field names on the right with the ones in your own Splunk.
+name: security-detections Splunk example
+priority: 20
+transformations:
+  # 1) Map Sigma field names to your Splunk field names (right side = yours)
+  - id: map_web_fields
+    type: field_name_mapping
+    mapping:
+      c-ip: src_ip
+      cs-uri-stem: uri_path
+      sc-status: status
+    rule_conditions:
+      - type: logsource
+        category: webserver
+  # 2) Point web rules at your web index and sourcetype
+  - id: web_index
+    type: add_condition
+    conditions:
+      index: web
+      sourcetype: access_combined
+    rule_conditions:
+      - type: logsource
+        category: webserver
+  # 3) Point DNS rules at your DNS index
+  - id: dns_index
+    type: add_condition
+    conditions:
+      index: dns
+    rule_conditions:
+      - type: logsource
+        category: dns
+  # 4) AWS CloudTrail rules
+  - id: cloudtrail_index
+    type: add_condition
+    conditions:
+      index: aws_cloudtrail
+    rule_conditions:
+      - type: logsource
+        product: aws
+        service: cloudtrail
