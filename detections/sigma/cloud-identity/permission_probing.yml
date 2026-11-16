@@ -6,6 +6,7 @@ description: |
   EC2 API calls rejected with DryRunOperation, used to test permissions without acting. Used by the correlation rule below.
 references:
   - FBI FLASH-20261113-001
+  - https://blog.malwaremustdie.org/2026/11/mmd-072-2026-artex-detection-signature.html
 author: Arunkumar R
 date: 2026-11-16
 tags:
@@ -30,6 +31,7 @@ description: |
   Thresholds are examples only. Tune on your own baseline and run in log-only mode first.
 references:
   - FBI FLASH-20261113-001
+  - https://blog.malwaremustdie.org/2026/11/mmd-072-2026-artex-detection-signature.html
 author: Arunkumar R
 date: 2026-11-16
 tags:

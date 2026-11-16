@@ -10,13 +10,14 @@ A public reference library from my security videos on product security and AI se
 | Folder | What is inside |
 |--------|----------------|
 | [detections/](detections/README.md) | Sigma detection rules, grouped by category, and example pipelines for converting them to Splunk and other SIEMs |
+| [detections/iocs](detections/iocs/artex-historical-iocs.md) | Historical indicator lists with sources and caveats (hunting leads, not block lists) |
 | [videos/](videos/) | One page per video: topic, sources and the content it uses |
 
 ### Videos
 
 | Video page | Topic | Content |
 |------------|-------|---------|
-| [AI pentest defence](videos/ai-pentest-defense.md) | Defending against AI-driven penetration testing tools | 7 Sigma rules in [detections/sigma](detections/sigma/) |
+| [AI pentest defence](videos/ai-pentest-defense.md) | Defending against AI-driven penetration testing tools | 8 Sigma rules in [detections/sigma](detections/sigma/) and ARTEX indicators in [detections/iocs](detections/iocs/) |
 
 ### Detection categories
 

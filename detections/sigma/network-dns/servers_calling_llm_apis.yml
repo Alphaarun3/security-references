@@ -8,6 +8,7 @@ description: |
 references:
   - https://blog.cloudflare.com/adapting-to-ai-penetration-testing-orchestrators/
   - FBI FLASH-20261113-001
+  - https://blog.malwaremustdie.org/2026/11/mmd-072-2026-artex-detection-signature.html
 author: Arunkumar R
 date: 2026-11-16
 tags:

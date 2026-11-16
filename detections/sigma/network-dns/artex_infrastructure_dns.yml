@@ -1,0 +1,31 @@
+title: DNS Query to Known ARTEX Infrastructure Domains
+id: 6f0644af-2ab8-4f72-b175-8d8af5bd069b
+status: experimental
+description: |
+  DNS lookups for domains reported as ARTEX-related infrastructure (an LLM reseller gateway and past-incident hosts).
+  These are historical indicators and can be reassigned or re-registered. Correlate with other activity (for example the LLM API
+  rule in this folder or a behavioural hit) before blocking, and re-check them against the original sources.
+  See detections/iocs/artex-historical-iocs.md for sources and status.
+references:
+  - FBI FLASH-20261113-001
+  - https://blog.malwaremustdie.org/2026/11/mmd-072-2026-artex-detection-signature.html
+author: Arunkumar R
+date: 2026-11-16
+tags:
+  - attack.command-and-control
+  - attack.t1102
+logsource:
+  category: dns
+detection:
+  selection:
+    query|endswith:
+      - 'xcai.pro'
+      - 'artex.lol'
+      - 'artex.tokena2b.top'
+      - 'artex.ok7777.eu.cc'
+      - 'artex.noog2infra.site'
+  condition: selection
+falsepositives:
+  - Security researchers or analysts looking these domains up
+  - Domains re-registered by unrelated parties
+level: medium

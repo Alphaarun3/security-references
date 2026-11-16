@@ -15,8 +15,13 @@ New rows are added with each video. Video pages are in [videos/](../videos/).
 | [Token creates resources](sigma/cicd-tokens/token_creates_resources.yml) | One identity creates many functions, keys or roles quickly | correlation | [AI pentest defence](../videos/ai-pentest-defense.md) |
 | [Servers calling LLM APIs](sigma/network-dns/servers_calling_llm_apis.yml) | DNS lookups for LLM API hosts from hosts with no need | base rule | [AI pentest defence](../videos/ai-pentest-defense.md) |
 | [Permission probing](sigma/cloud-identity/permission_probing.yml) | Many distinct AWS DryRun permission checks | correlation | [AI pentest defence](../videos/ai-pentest-defense.md) |
+| [ARTEX infrastructure domains](sigma/network-dns/artex_infrastructure_dns.yml) | DNS lookups for reported ARTEX-related domains (historical, vet first) | base rule | [AI pentest defence](../videos/ai-pentest-defense.md) |
 
 Correlation files hold a base rule plus a Sigma correlation rule (`event_count` / `value_count`), which need a recent pySigma backend.
+
+## Indicators
+
+Historical ARTEX domains and IP addresses, with sources and caveats, are in [iocs/artex-historical-iocs.md](iocs/artex-historical-iocs.md). Treat them as hunting leads, not a block list.
 
 ## Convert to your SIEM
 
